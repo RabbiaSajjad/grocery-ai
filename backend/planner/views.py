@@ -1,11 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
 
 from pantry.models import PantryItem
 
 from .services import generate_grocery_plan
 from .serializers import GroceryPlanRequestSerializer
+from .models import GroceryPlan
 
 class GeneratePlanView(APIView):
 
@@ -29,4 +31,21 @@ class GeneratePlanView(APIView):
             pantry_items,
         )
 
+        GroceryPlan.objects.create(
+            user=request.user,
+            prompt=serializer.validated_data["prompt"],
+            meal_plan=result["meal_plan"],
+            grocery_list=result["grocery_list"],
+            estimated_cost=result["estimated_total_cost"]
+        )
+
         return Response(result)
+
+class GroceryPlanHistoryView(generics.ListAPIView):
+    serializer_class = GroceryPlanSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return GroceryPlan.objects.filter(
+            user=self.request.user
+        ).order_by("-created_at")

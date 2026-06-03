@@ -9,4 +9,5 @@ urlpatterns = [
         GeneratePlanView.as_view(),
         name="generate-plan",
     ),
+    path("history/", GroceryPlanHistoryView.as_view()),
 ]
