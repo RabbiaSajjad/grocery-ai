@@ -8,15 +8,20 @@ function Login() {
   });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
+  try {
     const response = await api.post("/auth/login/", form);
 
     localStorage.setItem("accessToken", response.data.access);
     localStorage.setItem("refreshToken", response.data.refresh);
 
     alert("Logged in successfully");
-  };
+  } catch (error) {
+    alert("Login failed. Check username/password.");
+    console.error(error.response?.data || error.message);
+  }
+};
 
   return (
     <div>
