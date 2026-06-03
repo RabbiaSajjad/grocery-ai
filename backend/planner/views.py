@@ -6,7 +6,7 @@ from rest_framework import generics
 from pantry.models import PantryItem
 
 from .services import generate_grocery_plan
-from .serializers import GroceryPlanRequestSerializer
+from .serializers import GroceryPlanRequestSerializer, GroceryPlanSerializer
 from .models import GroceryPlan
 
 class GeneratePlanView(APIView):
@@ -20,7 +20,7 @@ class GeneratePlanView(APIView):
         )
         serializer.is_valid(raise_exception=True)
 
-        pantry_items = list(
+        pantry_items = list(  
             PantryItem.objects.filter(
                 user=request.user
             ).values_list("name", flat=True)

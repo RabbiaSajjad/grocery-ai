@@ -1,7 +1,7 @@
 # planner/urls.py
 
 from django.urls import path
-from .views import GeneratePlanView
+from .views import GeneratePlanView, GroceryPlanHistoryView
 
 urlpatterns = [
     path(
